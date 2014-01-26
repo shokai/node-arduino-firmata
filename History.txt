@@ -1,3 +1,8 @@
+=== 0.0.4 2014-01-27
+
+* add tests
+* bugfix digitalRead()
+
 === 0.0.3 2014-01-27
 
 * fix coffee-script
