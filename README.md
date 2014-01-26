@@ -86,6 +86,15 @@ setInterval(function(){
 ```
 
 
+## Test
+
+    % npm install
+
+connect firmata installed Arduino board, then
+
+    % grunt test
+
+
 Contributing
 ------------
 1. Fork it
