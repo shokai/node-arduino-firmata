@@ -73,9 +73,9 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
         debug 'request REPORT_VERSION'
         @write ArduinoFirmata.REPORT_VERSION
       , 500
-      @status = ArduinoFirmata.Status.OPEN
       @once 'boardVersion', (version) =>
         clearInterval cid
+        @status = ArduinoFirmata.Status.OPEN
         @emit 'connect'
       @serialport.on 'data', (data) =>
         for byte in data
@@ -87,6 +87,7 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
     return @status is ArduinoFirmata.Status.OPEN
 
   close: (callback) ->
+    @status = ArduinoFirmata.Status.CLOSE
     @serialport.close callback
 
   write: (byte) ->
@@ -116,9 +117,9 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
   analogWrite: (pin, value) ->
     value = Math.floor value
     @pinMode pin, ArduinoFirmata.PWM
-    @write ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F)
-    @write value & 0x7F
-    @write value >>> 7
+    @write(ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F))
+    @write(value & 0x7F)
+    @write(value >>> 7)
 
   servoWrite: (pin, angle) ->
     @pinMode pin, ArduinoFirmata.SERVO
@@ -127,7 +128,7 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
     @write(angle >>> 7)
 
   digitalRead: (pin) ->
-    return (@digital_input_data[pin >>> 3] >>> (pin & 0x07)) & 0x01 > 0
+    return ((@digital_input_data[pin >>> 3] >>> (pin & 0x07)) & 0x01) > 0
 
   analogRead: (pin) ->
     return @analog_input_data[pin]

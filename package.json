@@ -10,6 +10,7 @@
   "devDependencies": {
     "coffee-errors": "*",
     "coffee-script": "*",
+    "async": "*",
     "mocha": "*",
     "grunt": "*",
     "grunt-simple-mocha": "*",
