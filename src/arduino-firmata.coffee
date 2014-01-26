@@ -1,4 +1,3 @@
-fs = require 'fs'
 events = require 'eventemitter2'
 {SerialPort} = serialport = require 'serialport'
 
@@ -32,10 +31,11 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
   @END_SYSEX       = 0xF7 # end a MIDI SysEx message
 
   @list: (callback) ->
-    fs.readdir '/dev', (err, files) ->
+    serialport.list (err, ports) ->
       return callback err if err
       devices = []
-      devices.push "/dev/#{f}" for f in files when /tty\.?(usb|acm)/i.test f
+      for port in ports when /usb|acm|com\d+/i.test f
+        devices.push "/dev/#{f}"
       callback null, devices
 
   constructor: ->
