@@ -11,6 +11,7 @@
 === 0.0.2 2014-01-26
 
 * use SerialPort.list() instead of fs.readdir()
+  * thank you for suggestion @rwaldron
 
 === 0.0.1 2014-01-26
 
