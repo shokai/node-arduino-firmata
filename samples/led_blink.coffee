@@ -10,5 +10,6 @@ arduino.on 'connect', ->
   setInterval ->
     console.log stat
     arduino.digitalWrite 13, stat
+    arduino.digitalWrite 12, !stat
     stat = !stat  ## blink
   , 300
