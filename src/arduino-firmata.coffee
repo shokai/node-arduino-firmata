@@ -117,6 +117,12 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
     @write(value & 0x7F)
     @write(value >>> 7)
 
+  servoWrite: (pin, angle) ->
+    @pinMode pin, ArduinoFirmata.SERVO
+    @write(ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F))
+    @write(angle & 0x7F)
+    @write(angle >>> 7)
+
   digitalRead: (pin) ->
     return (@digital_input_data[pin >>> 3] >>> (pin & 0x07)) & 0x01 > 0
 
