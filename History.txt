@@ -1,3 +1,8 @@
+=== 0.0.3 2014-01-27
+
+* fix coffee-script
+  * thank you for contributing @geta6
+
 === 0.0.2 2014-01-26
 
 * use SerialPort.list() instead of fs.readdir()
