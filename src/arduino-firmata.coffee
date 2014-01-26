@@ -1,14 +1,14 @@
-events = require('eventemitter2')
 fs = require 'fs'
-SerialPort = require('serialport').SerialPort
+events = require 'eventemitter2'
+{SerialPort} = serialport = require 'serialport'
+
 debug = require('debug')('arduino-firmata')
 
-module.exports = class ArduinoFirmata extends events.EventEmitter2
+exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
 
-  @Status = {
+  @Status =
     CLOSE: 0
     OPEN: 1
-  }
 
   @INPUT  = 0
   @OUTPUT = 1
@@ -33,11 +33,10 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
 
   @list: (callback) ->
     fs.readdir '/dev', (err, files) ->
-      callback(err) if err
+      return callback err if err
       devices = []
-      for f in files
-        devices.push "/dev/#{f}" if f.match(/tty\.?(usb|acm)/i)
-      callback(null, devices)
+      devices.push "/dev/#{f}" for f in files when /tty\.?(usb|acm)/i.test f
+      callback null, devices
 
   constructor: ->
     @status = ArduinoFirmata.Status.CLOSE
@@ -53,18 +52,18 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
     @boardVersion = null
 
   connect: (@serialport_name, opts={baudrate: 57600}) ->
-    opts.parser = require('serialport').parsers.raw
+    opts.parser = serialport.parsers.raw
     unless @serialport_name
       ArduinoFirmata.list (err, devices) =>
-        @connect(devices[0], opts)
+        @connect devices[0], opts
       return @
 
     @once 'connect', ->
       for i in [0...6]
-        @write(ArduinoFirmata.REPORT_ANALOG | i)
+        @write ArduinoFirmata.REPORT_ANALOG | i
         @write 1
       for i in [0...2]
-        @write(ArduinoFirmata.REPORT_DIGITAL | i)
+        @write ArduinoFirmata.REPORT_DIGITAL | i
         @write 1
 
     @serialport = new SerialPort @serialport_name, opts
@@ -78,8 +77,7 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
         clearInterval cid
         @emit 'connect'
       @serialport.on 'data', (data) =>
-        for byte in data
-          @process_input byte
+        @process_input byte for byte in data
 
     return @
 
@@ -87,7 +85,7 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
     return @status is ArduinoFirmata.Status.OPEN
 
   close: (callback) ->
-    @serialport.close(callback)
+    @serialport.close callback
 
   write: (byte) ->
     @serialport.write [byte]
@@ -95,12 +93,9 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
   pinMode: (pin, mode) ->
     @write ArduinoFirmata.SET_PIN_MODE
     @write pin
-    switch mode
-      when true
-        mode = ArduinoFirmata.OUTPUT
-      when false
-        mode = ArduinoFirmata.INPUT
-    @write mode
+    @write switch mode
+      when true then ArduinoFirmata.OUTPUT
+      when false then ArduinoFirmata.INPUT
 
   digitalWrite: (pin, value) ->
     @pinMode pin, ArduinoFirmata.OUTPUT
@@ -109,22 +104,22 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
       @digital_output_data[port_num] &= ~(1 << (pin & 0x07))
     else
       @digital_output_data[port_num] |= (1 << (pin & 0x07))
-    @write(ArduinoFirmata.DIGITAL_MESSAGE | port_num)
-    @write(@digital_output_data[port_num] & 0x7F)
-    @write(@digital_output_data[port_num] >>> 7)
+    @write ArduinoFirmata.DIGITAL_MESSAGE | port_num
+    @write @digital_output_data[port_num] & 0x7F
+    @write @digital_output_data[port_num] >>> 7
 
   analogWrite: (pin, value) ->
-    value = Math.floor(value)
+    value = Math.floor value
     @pinMode pin, ArduinoFirmata.PWM
-    @write(ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F))
-    @write(value & 0x7F)
-    @write(value >>> 7)
+    @write ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F)
+    @write value & 0x7F
+    @write value >>> 7
 
   servoWrite: (pin, angle) ->
     @pinMode pin, ArduinoFirmata.SERVO
-    @write(ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F))
-    @write(angle & 0x7F)
-    @write(angle >>> 7)
+    @write ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F)
+    @write angle & 0x7F
+    @write angle >>> 7
 
   digitalRead: (pin) ->
     return (@digital_input_data[pin >>> 3] >>> (pin & 0x07)) & 0x01 > 0
