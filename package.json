@@ -1,0 +1,30 @@
+{
+  "name": "arduino-firmata",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Arduino Firmata implementation for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "coffee-errors": "*",
+    "coffee-script": "*",
+    "mocha": "*",
+    "grunt": "*",
+    "grunt-simple-mocha": "*",
+    "grunt-notify": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-coffeelint": "git+https://github.com/geta6/grunt-coffeelint",
+    "grunt-contrib-watch": "git+https://github.com/gruntjs/grunt-contrib-watch"
+  },
+  "keywords": [
+    "arduino",
+    "firmata"
+  ],
+  "author": "Sho Hashimoto <hashimoto@shokai.org>",
+  "license": "MIT",
+  "dependencies": {
+    "serialport": "~1.3.1"
+  }
+}
