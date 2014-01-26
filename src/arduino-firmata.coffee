@@ -5,9 +5,10 @@ debug = require('debug')('arduino-firmata')
 
 exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
 
-  @Status =
+  @Status = {
     CLOSE: 0
     OPEN: 1
+  }
 
   @INPUT  = 0
   @OUTPUT = 1
@@ -34,8 +35,8 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
     serialport.list (err, ports) ->
       return callback err if err
       devices = []
-      for port in ports when /usb|acm|com\d+/i.test f
-        devices.push "/dev/#{f}"
+      for port in ports
+        devices.push port.comName if /usb|acm|com\d+/i.test port.comName
       callback null, devices
 
   constructor: ->
@@ -47,8 +48,8 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
     @parsing_sysex = false
     @sysex_bytes_read = 0
     @digital_output_data = [0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0]
-    @digital_input_data = [0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0]
-    @analog_input_data = [0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0]
+    @digital_input_data  = [0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0]
+    @analog_input_data   = [0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0]
     @boardVersion = null
 
   connect: (@serialport_name, opts={baudrate: 57600}) ->
@@ -60,10 +61,10 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
 
     @once 'connect', ->
       for i in [0...6]
-        @write ArduinoFirmata.REPORT_ANALOG | i
+        @write(ArduinoFirmata.REPORT_ANALOG | i)
         @write 1
       for i in [0...2]
-        @write ArduinoFirmata.REPORT_DIGITAL | i
+        @write(ArduinoFirmata.REPORT_DIGITAL | i)
         @write 1
 
     @serialport = new SerialPort @serialport_name, opts
@@ -77,7 +78,8 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
         clearInterval cid
         @emit 'connect'
       @serialport.on 'data', (data) =>
-        @process_input byte for byte in data
+        for byte in data
+          @process_input byte
 
     return @
 
@@ -93,9 +95,12 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
   pinMode: (pin, mode) ->
     @write ArduinoFirmata.SET_PIN_MODE
     @write pin
-    @write switch mode
-      when true then ArduinoFirmata.OUTPUT
-      when false then ArduinoFirmata.INPUT
+    switch mode
+      when true
+        mode = ArduinoFirmata.OUTPUT
+      when false
+        mode = ArduinoFirmata.INPUT
+    @write mode
 
   digitalWrite: (pin, value) ->
     @pinMode pin, ArduinoFirmata.OUTPUT
@@ -104,9 +109,9 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
       @digital_output_data[port_num] &= ~(1 << (pin & 0x07))
     else
       @digital_output_data[port_num] |= (1 << (pin & 0x07))
-    @write ArduinoFirmata.DIGITAL_MESSAGE | port_num
-    @write @digital_output_data[port_num] & 0x7F
-    @write @digital_output_data[port_num] >>> 7
+    @write(ArduinoFirmata.DIGITAL_MESSAGE | port_num)
+    @write(@digital_output_data[port_num] & 0x7F)
+    @write(@digital_output_data[port_num] >>> 7)
 
   analogWrite: (pin, value) ->
     value = Math.floor value
@@ -117,9 +122,9 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
 
   servoWrite: (pin, angle) ->
     @pinMode pin, ArduinoFirmata.SERVO
-    @write ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F)
-    @write angle & 0x7F
-    @write angle >>> 7
+    @write(ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F))
+    @write(angle & 0x7F)
+    @write(angle >>> 7)
 
   digitalRead: (pin) ->
     return (@digital_input_data[pin >>> 3] >>> (pin & 0x07)) & 0x01 > 0
