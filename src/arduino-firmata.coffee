@@ -1,5 +1,4 @@
 events = require('eventemitter2')
-fs = require 'fs'
 SerialPort = require('serialport').SerialPort
 debug = require('debug')('arduino-firmata')
 
@@ -32,11 +31,11 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
   @END_SYSEX       = 0xF7 # end a MIDI SysEx message
 
   @list: (callback) ->
-    fs.readdir '/dev', (err, files) ->
+    require('serialport').list (err, ports) ->
       callback(err) if err
       devices = []
-      for f in files
-        devices.push "/dev/#{f}" if f.match(/tty\.?(usb|acm)/i)
+      for port in ports
+        devices.push port.comName if port.comName.match(/usb|acm|com\d+/i)
       callback(null, devices)
 
   constructor: ->
