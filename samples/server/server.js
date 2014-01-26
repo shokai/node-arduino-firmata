@@ -39,3 +39,4 @@ io.sockets.on('connection', function(socket) {
 var port = process.argv[2]-0 || 3000;
 app.listen(port);
 console.log("server start - port:" + port);
+console.log(" => http://localhost:"+port)
