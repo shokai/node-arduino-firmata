@@ -6,6 +6,7 @@ Arduino Firmata protocol (http://firmata.org) implementation on Node.js.
 - You can embed Arduino code into Node.js application.
 - Support sharing an Arduino between multiple processes.
 - https://github.com/shokai/node-arduino-firmata
+- https://npmjs.org/package/arduino-firmata
 
 
 ## Install
