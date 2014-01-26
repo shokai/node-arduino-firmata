@@ -165,4 +165,3 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
       command is ArduinoFirmata.REPORT_VERSION
         @wait_for_data = 2
         @execute_multi_byte_command = command
-      else
