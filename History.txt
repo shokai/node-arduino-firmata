@@ -1,16 +1,21 @@
+=== 0.0.5 2014-01-27
+
+* performance improvement (write bytes at once)
+* add socket.io sample  #7
+
 === 0.0.4 2014-01-27
 
-* add tests
+* add tests  #3
 * bugfix digitalRead()
 
 === 0.0.3 2014-01-27
 
-* fix coffee-script
+* fix coffee-script  #2
   * thank you for contributing @geta6
 
 === 0.0.2 2014-01-26
 
-* use SerialPort.list() instead of fs.readdir()
+* use SerialPort.list() instead of fs.readdir()  #1
   * thank you for suggestion @rwaldron
 
 === 0.0.1 2014-01-26
