@@ -110,6 +110,13 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
     @write(@digital_output_data[port_num] & 0x7F)
     @write(@digital_output_data[port_num] >>> 7)
 
+  analogWrite: (pin, value) ->
+    value = Math.floor(value)
+    @pinMode pin, ArduinoFirmata.PWM
+    @write(ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F))
+    @write(value & 0x7F)
+    @write(value >>> 7)
+
   digitalRead: (pin) ->
     return (@digital_input_data[pin >>> 3] >>> (pin & 0x07)) & 0x01 > 0
 
