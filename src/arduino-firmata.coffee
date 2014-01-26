@@ -86,6 +86,9 @@ module.exports = class ArduinoFirmata extends events.EventEmitter2
   isOpen: ->
     return @status is ArduinoFirmata.Status.OPEN
 
+  close: (callback) ->
+    @serialport.close(callback)
+
   write: (byte) ->
     @serialport.write [byte]
 
