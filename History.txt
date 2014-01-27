@@ -1,7 +1,12 @@
+=== 0.2.0 2014-01-28
+
+* implement sysex(cmd, data_array)  #6
+
 === 0.1.0 2014-01-27
 
 * implement on("analogChange", callback)  #9
 * implement on("digitalChange", callback)  #8
+* fix socket.io sample
 
 === 0.0.5 2014-01-27
 
