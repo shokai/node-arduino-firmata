@@ -35,6 +35,8 @@ arduino.on('analogChange', function(e){
 
 io.sockets.on('connection', function(socket) {
 
+  socket.emit('analogRead', arduino.analogRead(0));
+
   // on click button on HTML-side, change LED
   socket.on('digitalWrite', function(stat) {
     console.log("pin13:"+stat);
