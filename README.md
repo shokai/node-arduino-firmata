@@ -23,6 +23,8 @@ Arduino Firmata protocol (http://firmata.org) implementation on Node.js.
 
 ## Usage
 
+### Samples
+
 - https://github.com/shokai/node-arduino-firmata/tree/master/samples
 
 ### Setup
@@ -84,6 +86,13 @@ setInterval(function(){
 Analog Read
 ```javascript
 console.log( arduino.analogRead(0) ); // => 0 ~ 1023
+```
+
+Analog Read (event)
+```javascript
+arduino.on('analogChange', function(e){
+  console.log("pin" + e.pin + " : " + e.old_value + " -> " + e.value);
+});
 ```
 
 Servo Motor
