@@ -1,3 +1,8 @@
+=== 0.1.0 2014-01-27
+
+* implement on("analogChange", callback)  #9
+* implement on("digitalChange", callback)  #8
+
 === 0.0.5 2014-01-27
 
 * performance improvement (write bytes at once)
