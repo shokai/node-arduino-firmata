@@ -64,6 +64,15 @@ arduino.pinMode(7, ArduinoFirmata.INPUT);
 console.log( arduino.digitalRead(7) ); // => true/false
 ```
 
+Digital Read (event)
+```javascript
+arduino.pinMode(7, ArduinoFirmata.INPUT);
+
+arduino.on('digitalChange', function(e){
+  console.log("pin" + e.pin + " : " + e.old_value + " -> " + e.value);
+});
+```
+
 Analog Write (PWM)
 ```
 setInterval(function(){

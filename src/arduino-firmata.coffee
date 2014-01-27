@@ -146,7 +146,14 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
         switch @execute_multi_byte_command
           when ArduinoFirmata.DIGITAL_MESSAGE
             input_data = (@stored_input_data[0] << 7) + @stored_input_data[1]
+            diff = @digital_input_data[@multi_byte_channel] ^ input_data
             @digital_input_data[@multi_byte_channel] = input_data
+            if @listeners('digitalChange').length > 0
+              for i in [0..13]
+                if ((0x01 << i) & diff) > 0
+                  stat = (input_data&diff) > 0
+                  @emit 'digitalChange',
+                  {pin: i, value: stat, old_value: !stat}
           when ArduinoFirmata.ANALOG_MESSAGE
             analog_value = (@stored_input_data[0] << 7) + @stored_input_data[1]
             @analog_input_data[@multi_byte_channel] = analog_value
