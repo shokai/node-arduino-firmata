@@ -19,21 +19,28 @@ var app_handler = function(req, res) {
 
 var app = http.createServer(app_handler);
 var io = require('socket.io').listen(app);
-
+io.set('log level', 2);
 
 // var ArduinoFirmata = require('arduino-firmata');
 var ArduinoFirmata = require('../../');
 arduino = new ArduinoFirmata().connect();
 
+
+// emit sensor-value to HTML-side
+arduino.on('analogChange', function(e){
+  if(e.pin != 0) return;
+  console.log(e);
+  io.sockets.emit('analogRead', e.value);
+});
+
 io.sockets.on('connection', function(socket) {
 
-  setInterval(function() {
-    socket.emit('analogRead', arduino.analogRead(0));
-  }, 500);
-
+  // on click button on HTML-side, change LED
   socket.on('digitalWrite', function(stat) {
+    console.log("pin13:"+stat);
     arduino.digitalWrite(13, stat);
   });
+
 });
 
 var port = process.argv[2]-0 || 3000;

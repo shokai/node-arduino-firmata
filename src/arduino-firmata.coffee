@@ -156,7 +156,14 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
                   {pin: i, value: stat, old_value: !stat}
           when ArduinoFirmata.ANALOG_MESSAGE
             analog_value = (@stored_input_data[0] << 7) + @stored_input_data[1]
+            old_analog_value = @analogRead(@multi_byte_channel)
             @analog_input_data[@multi_byte_channel] = analog_value
+            if old_analog_value != analog_value
+              @emit 'analogChange', {
+                pin: @multi_byte_channel,
+                value: analog_value,
+                old_value: old_analog_value
+              }
           when ArduinoFirmata.REPORT_VERSION
             @boardVersion = "#{@stored_input_data[1]}.#{@stored_input_data[0]}"
             @emit 'boardVersion', @boardVersion
