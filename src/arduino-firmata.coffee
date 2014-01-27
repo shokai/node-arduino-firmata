@@ -88,6 +88,9 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
     @status = ArduinoFirmata.Status.CLOSE
     @serialport.close callback
 
+  reset: ->
+    @write [ArduinoFirmata.SYSTEM_RESET]
+
   write: (bytes) ->
     @serialport.write bytes
 
