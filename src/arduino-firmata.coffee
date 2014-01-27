@@ -91,6 +91,14 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
   write: (bytes) ->
     @serialport.write bytes
 
+  sysex: (command, data=[]) ->
+    ## http://firmata.org/wiki/V2.1ProtocolDetails#Sysex_Message_Format
+    data = data.map (i) ->
+      return i & 0b1111111
+    @write [ArduinoFirmata.START_SYSEX, command]
+    @write data
+    @write [ArduinoFirmata.END_SYSEX]
+
   pinMode: (pin, mode) ->
     switch mode
       when true
@@ -135,7 +143,7 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
         @parsing_sysex = false
         sysex_command = @stored_input_data[0]
         sysex_data = @stored_input_data[1...@sysex_bytes_read]
-        @emit 'sysex', sysex_command, sysex_data
+        @emit 'sysex', {command: sysex_command, data: sysex_data}
       else
         @stored_input_data[@sysex_bytes_read] = input_data
         @sysex_bytes_read += 1

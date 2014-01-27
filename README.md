@@ -9,19 +9,23 @@ Arduino Firmata protocol (http://firmata.org) implementation on Node.js.
 - https://npmjs.org/package/arduino-firmata
 
 
-## Install
+Install
+-------
 
     % npm install arduino-firmata
 
 
-## Requirements
+Requirements
+------------
+
 * Arduino (http://arduino.cc)
   * testing with Arduino UNO, Leonardo and Micro.
 * Arduino Standard Firmata v2.2
   * Arduino IDE -> [File] -> [Examples] -> [Firmata] -> [StandardFirmata]
 
 
-## Usage
+Usage
+-----
 
 ### Samples
 
@@ -103,14 +107,37 @@ setInterval(function(){
 }, 1000);
 ```
 
+### Sysex
 
-## Test
+- http://firmata.org/wiki/V2.1ProtocolDetails#Sysex_Message_Format
+- https://github.com/shokai/node-arduino-firmata/tree/master/samples/sysex
+
+Send
+```javascript
+arduino.sysex(0x01, [13, 5, 2]);  // command, data_array
+```
+
+Register Sysex Event
+```javascript
+arduino.on('sysex', function(e){
+  console.log("command : " + e.command);
+  console.log(e.data);
+});
+```
+
+
+Test
+----
+
+### Install SysexLedBlinkFirmata into Arduino
+
+* https://github.com/shokai/node-arduino-firmata/blob/master/samples/sysex/StandardFirmataWithLedBlink/StandardFirmataWithLedBlink.ino
+
+
+### Run Test
 
     % npm install
-
-connect firmata installed Arduino board, then
-
-    % grunt test
+    % npm test
 
 
 Contributing

@@ -107,3 +107,16 @@ describe 'instance of ArduinoFirmata', ->
       for i in [0..5]
         val = arduino.analogRead(i)
         assert.ok (0 <= val and val < 1024)
+
+
+  it 'should have method "sysex"', ->
+    assert.equal typeof arduino['sysex'], 'function'
+
+  describe 'method "sysex"', ->
+
+    it 'should send sysex command', (done) ->
+      arduino.sysex 0x01, [13,3,2]
+      arduino.on 'sysex', (e) ->
+        assert e.command, 0x01
+        assert e.data, [0x01, 0, 3, 0, 2]
+        done()
