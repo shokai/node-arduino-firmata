@@ -1,3 +1,8 @@
+=== 0.2.1 2014-01-29
+
+* fix servoWrite sample and README
+* callback after digitalWrite, analogWrite, servoWrite, reset and sysex  #11
+
 === 0.2.0 2014-01-28
 
 * implement sysex(cmd, data_array)  #6
