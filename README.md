@@ -86,7 +86,7 @@ arduino.on('digitalChange', function(e){
 Analog Write (PWM)
 ```
 setInterval(function(){
-  var an = Math.random()*255;
+  var an = Math.random()*255; // 0 ~ 255
   arduino.analogWrite(9, an, callback);
 }, 100);
 ```
@@ -106,8 +106,8 @@ arduino.on('analogChange', function(e){
 Servo Motor
 ```javascript
 setInterval(function(){
-  var angle = Math.random()*180;
-  arduino.analogWrite(11, angle, callback);
+  var angle = Math.random()*180; // 0 ~ 180
+  arduino.servoWrite(11, angle, callback);
 }, 1000);
 ```
 

@@ -10,6 +10,6 @@ arduino.on('connect', function(){
   setInterval(function(){
     var angle = Math.random()*180;
     console.log("servo write 9 pin : " + angle);
-    arduino.analogWrite(9, angle);
+    arduino.servoWrite(9, angle);
   }, 1000);
 });
