@@ -88,29 +88,30 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
     @status = ArduinoFirmata.Status.CLOSE
     @serialport.close callback
 
-  reset: ->
-    @write [ArduinoFirmata.SYSTEM_RESET]
+  reset: (callback) ->
+    @write [ArduinoFirmata.SYSTEM_RESET], callback
 
-  write: (bytes) ->
-    @serialport.write bytes
+  write: (bytes, callback) ->
+    @serialport.write bytes, callback
 
-  sysex: (command, data=[]) ->
+  sysex: (command, data=[], callback) ->
     ## http://firmata.org/wiki/V2.1ProtocolDetails#Sysex_Message_Format
     data = data.map (i) ->
-      return i & 0b1111111
-    @write [ArduinoFirmata.START_SYSEX, command]
-    @write data
-    @write [ArduinoFirmata.END_SYSEX]
+      return i & 0b1111111  # 7bit
+    write_data =
+      [ArduinoFirmata.START_SYSEX, command].
+        concat data, [ArduinoFirmata.END_SYSEX]
+    @write write_data, callback
 
-  pinMode: (pin, mode) ->
+  pinMode: (pin, mode, callback) ->
     switch mode
       when true
         mode = ArduinoFirmata.OUTPUT
       when false
         mode = ArduinoFirmata.INPUT
-    @write [ArduinoFirmata.SET_PIN_MODE, pin, mode]
+    @write [ArduinoFirmata.SET_PIN_MODE, pin, mode], callback
 
-  digitalWrite: (pin, value) ->
+  digitalWrite: (pin, value, callback) ->
     @pinMode pin, ArduinoFirmata.OUTPUT
     port_num = (pin >>> 3) & 0x0F
     if value is 0 or value is false
@@ -119,20 +120,23 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
       @digital_output_data[port_num] |= (1 << (pin & 0x07))
     @write [ (ArduinoFirmata.DIGITAL_MESSAGE | port_num),
              (@digital_output_data[port_num] & 0x7F),
-             (@digital_output_data[port_num] >>> 7) ]
+             (@digital_output_data[port_num] >>> 7) ],
+           callback
 
-  analogWrite: (pin, value) ->
+  analogWrite: (pin, value, callback) ->
     value = Math.floor value
     @pinMode pin, ArduinoFirmata.PWM
     @write [ (ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F)),
              (value & 0x7F),
-             (value >>> 7) ]
+             (value >>> 7) ],
+           callback
 
-  servoWrite: (pin, angle) ->
-    @pinMode pin, ArduinoFirmata.SERVO
+  servoWrite: (pin, angle, callback) ->
+    @pinMode pin, ArduinoFirmata.SERVO, (err, res) =>
     @write [ (ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F)),
              (angle & 0x7F),
-             (angle >>> 7) ]
+             (angle >>> 7) ],
+           callback
 
   digitalRead: (pin) ->
     return ((@digital_input_data[pin >>> 3] >>> (pin & 0x07)) & 0x01) > 0

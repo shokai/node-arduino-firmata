@@ -49,6 +49,10 @@ arduino.on('connect', function(){
 });
 ```
 
+Reset
+```javascript
+arduino.reset(callback);
+```
 
 Close
 ```javascript
@@ -60,8 +64,8 @@ arduino.close(callback);
 
 Digital Write
 ```javascript
-arduino.digitalWrite(13, true);
-arduino.digitalWrite(13, false);
+arduino.digitalWrite(13, true, callback);
+arduino.digitalWrite(13, false, callback);
 ```
 
 Digital Read
@@ -83,7 +87,7 @@ Analog Write (PWM)
 ```
 setInterval(function(){
   var an = Math.random()*255;
-  arduino.analogWrite(9, an);
+  arduino.analogWrite(9, an, callback);
 }, 100);
 ```
 
@@ -103,7 +107,7 @@ Servo Motor
 ```javascript
 setInterval(function(){
   var angle = Math.random()*180;
-  arduino.analogWrite(11, angle);
+  arduino.analogWrite(11, angle, callback);
 }, 1000);
 ```
 
@@ -114,7 +118,7 @@ setInterval(function(){
 
 Send
 ```javascript
-arduino.sysex(0x01, [13, 5, 2]);  // command, data_array
+arduino.sysex(0x01, [13, 5, 2], callback);  // command, data_array, callback
 ```
 
 Register Sysex Event
