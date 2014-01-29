@@ -132,7 +132,7 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
            callback
 
   servoWrite: (pin, angle, callback) ->
-    @pinMode pin, ArduinoFirmata.SERVO, (err, res) =>
+    @pinMode pin, ArduinoFirmata.SERVO
     @write [ (ArduinoFirmata.ANALOG_MESSAGE | (pin & 0x0F)),
              (angle & 0x7F),
              (angle >>> 7) ],
@@ -192,7 +192,7 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
         @parsing_sysex = true
         @sysex_bytes_read = 0
       else if command is ArduinoFirmata.DIGITAL_MESSAGE or
-      command is ArduinoFirmata.ANALOG_MESSAGE or
-      command is ArduinoFirmata.REPORT_VERSION
+              command is ArduinoFirmata.ANALOG_MESSAGE or
+              command is ArduinoFirmata.REPORT_VERSION
         @wait_for_data = 2
         @execute_multi_byte_command = command
