@@ -37,6 +37,7 @@ describe 'instance of ArduinoFirmata', ->
 
 
   it 'should emit "connect" event', (done) ->
+    @timeout 10000
     arduino.connect()
     arduino.on 'connect', ->
       assert.equal arduino.isOpen(), true

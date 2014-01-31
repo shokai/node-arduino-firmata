@@ -59,11 +59,16 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
         @connect devices[0], opts
       return @
 
-    @once 'connect', ->
-      for i in [0...6]
-        @write [(ArduinoFirmata.REPORT_ANALOG | i), 1]
-      for i in [0...2]
-        @write [(ArduinoFirmata.REPORT_DIGITAL | i), 1]
+    @once 'boardReady', ->
+      debug 'boardReady'
+      setTimeout =>
+        for i in [0...6]
+          @write [(ArduinoFirmata.REPORT_ANALOG | i), 1]
+        for i in [0...2]
+          @write [(ArduinoFirmata.REPORT_DIGITAL | i), 1]
+        debug 'init IO ports'
+        @emit 'connect'
+      , 3000
 
     @serialport = new SerialPort @serialport_name, opts
     @serialport.once 'open', =>
@@ -74,7 +79,7 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
       @once 'boardVersion', (version) =>
         clearInterval cid
         @status = ArduinoFirmata.Status.OPEN
-        @emit 'connect'
+        @emit 'boardReady'
       @serialport.on 'data', (data) =>
         for byte in data
           @process_input byte
