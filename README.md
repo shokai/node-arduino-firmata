@@ -19,7 +19,13 @@ Requirements
 ------------
 
 * Arduino (http://arduino.cc)
-  * testing with Arduino UNO, Leonardo and Micro.
+  * testing with
+    * Arduino Diecimila
+    * Arduino Duemillanove
+    * Arduino UNO
+    * Arduino Leonardo
+    * Arduino Micro
+    * Seeduino v2
 * Arduino Standard Firmata v2.2
   * Arduino IDE -> [File] -> [Examples] -> [Firmata] -> [StandardFirmata]
 
