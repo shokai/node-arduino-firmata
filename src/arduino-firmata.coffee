@@ -52,6 +52,9 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
     @analog_input_data   = [0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0]
     @boardVersion = null
 
+  isOldArduinoDevice: ->
+    return /usbserial|USB/.test @serialport_name
+
   connect: (@serialport_name, opts={baudrate: 57600}) ->
     opts.parser = serialport.parsers.raw
     unless @serialport_name
@@ -61,6 +64,13 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
 
     @once 'boardReady', ->
       debug 'boardReady'
+      io_init_wait = if @isOldArduinoDevice()
+        debug "old arduino device found #{@serialport_name}"
+        3000
+      else
+        debug "new arduino device found #{@serialport_name}"
+        100
+      debug "wait #{io_init_wait}(msec)"
       setTimeout =>
         for i in [0...6]
           @write [(ArduinoFirmata.REPORT_ANALOG | i), 1]
@@ -68,7 +78,7 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
           @write [(ArduinoFirmata.REPORT_DIGITAL | i), 1]
         debug 'init IO ports'
         @emit 'connect'
-      , 3000
+      , io_init_wait
 
     @serialport = new SerialPort @serialport_name, opts
     @serialport.once 'open', =>
