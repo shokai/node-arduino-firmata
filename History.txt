@@ -1,3 +1,7 @@
+=== 0.3.0 2014-01-31
+
+* add supported boards Arduino diecimila, duemillanove and seeduino  #4
+
 === 0.2.1 2014-01-29
 
 * fix servoWrite sample and README
