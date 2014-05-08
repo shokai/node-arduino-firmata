@@ -183,7 +183,7 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
                 if ((0x01 << i) & diff) > 0
                   stat = (input_data&diff) > 0
                   @emit 'digitalChange',
-                  {pin: i, value: stat, old_value: !stat}
+                  {pin: i+@multi_byte_channel*8, value: stat, old_value: !stat}
           when ArduinoFirmata.ANALOG_MESSAGE
             analog_value = (@stored_input_data[0] << 7) + @stored_input_data[1]
             old_analog_value = @analogRead(@multi_byte_channel)
