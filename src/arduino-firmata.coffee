@@ -1,3 +1,5 @@
+'use strict'
+
 events = require 'eventemitter2'
 {SerialPort} = serialport = require 'serialport'
 

@@ -19,7 +19,7 @@ module.exports = (grunt) ->
     coffeelint:
       options:
         max_line_length:
-          value: 79
+          value: 119
         indentation:
           value: 2
         newlines_after_classes:
@@ -29,10 +29,11 @@ module.exports = (grunt) ->
         no_unnecessary_fat_arrows:
           level: 'ignore'
       dist:
-        files: [
-          { expand: yes, cwd: 'src/', src: [ '**/*.coffee' ] }
-          { expand: yes, cwd: 'tests/', src: [ '**/*.coffee' ] }
-        ]
+        files:
+          src: [
+            '**/*.coffee'
+            '!node_modules/**'
+          ]
 
     coffee:
       dist:
