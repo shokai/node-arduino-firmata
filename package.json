@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "coffee-errors": "*",
-    "coffee-script": "*",
+    "coffee-script": "^1.8",
     "async": "*",
     "mocha": "*",
     "grunt": "*",
@@ -28,9 +28,9 @@
   "author": "Sho Hashimoto <hashimoto@shokai.org>",
   "license": "MIT",
   "dependencies": {
-    "serialport": "~1.3.1",
-    "eventemitter2": "~0.4.13",
-    "debug": "~0.7.4"
+    "serialport": "*",
+    "eventemitter2": "*",
+    "debug": "*"
   },
   "directories": {
     "test": "tests"
