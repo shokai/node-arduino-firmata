@@ -1,3 +1,11 @@
+=== 0.3.2 2014-10-02
+
+* use latest npm libs
+  * serialport, debug, eventemitter2
+  * thank you for suggestion @bigmonkeyboy
+
+* coffee-script v1.8.x to compile js
+
 === 0.3.1 2014-05-08
 
 * bugfix pin number of event "digitalChange"  #12
