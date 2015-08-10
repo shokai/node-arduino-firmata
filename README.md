@@ -136,6 +136,14 @@ arduino.on('sysex', function(e){
 ```
 
 
+Develop
+-------
+
+    % npm install
+    % npm run build
+    # or
+    % npm run watch
+
 Test
 ----
 
@@ -146,7 +154,6 @@ Test
 
 ### Run Test
 
-    % npm install
     % npm test
 
 
