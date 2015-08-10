@@ -5,7 +5,9 @@
   "description": "Arduino Firmata implementation for Node.js",
   "main": "lib/arduino-firmata.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "build": "grunt build",
+    "watch": "grunt"
   },
   "devDependencies": {
     "coffee-errors": "*",
