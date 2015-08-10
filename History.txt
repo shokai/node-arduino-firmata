@@ -1,3 +1,9 @@
+=== 0.3.3 2015-08-10
+
+* not commit compiled js in Git repos
+* not publish coffee script to npmjs.com
+
+
 === 0.3.2 2014-10-02
 
 * use latest npm libs
