@@ -38,7 +38,7 @@ exports = module.exports = class ArduinoFirmata extends events.EventEmitter2
       return callback err if err
       devices = []
       for port in ports
-        devices.push port.comName if /usb|acm|com\d+/i.test port.comName
+        devices.push port.comName if /usb|acm|com|ama\d+/i.test port.comName
       callback null, devices
 
   constructor: ->
